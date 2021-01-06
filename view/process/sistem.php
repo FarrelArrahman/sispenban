@@ -497,5 +497,80 @@ class sistem extends database {
         }
         return $data_nilai;
 	}
+
+
+	// Perhitungan Topsis
+	function topsis($kriteria, $alternatif) {
+		// hitung matriks keputusan ternormalisasi
+		$matriks_keputusan_ternormalisasi = $this->matriks_keputusan_ternormalisasi($kriteria, $alternatif);
+
+		$matriks_solusi = $this->matriks_solusi($matriks_keputusan_ternormalisasi);
+
+		// return $matriks_keputusan_ternormalisasi;
+		return [
+			'matriks_keputusan_ternormalisasi' => $matriks_keputusan_ternormalisasi, 
+			'matriks_solusi' => $matriks_solusi,
+		];
+	}
+
+	function matriks_keputusan_ternormalisasi($kriteria, $alternatif) {
+		$matriks = [];
+		$arr_alternatif = [];
+		
+		foreach($kriteria['data_kriteria'] as $kr) {
+			$matriks[$kr['IdDetailKriteria']] = 0;
+			foreach($alternatif as $IdAlternatif => $alt) {
+				foreach($alt['nilai'] as $k => $v) {
+					if($v['IdDetailKriteria'] == $kr['IdDetailKriteria']) {
+						$matriks[$kr['IdDetailKriteria']] += pow($v['Nilai'], 2);
+					}
+				}
+			}
+			$matriks[$kr['IdDetailKriteria']] = sqrt($matriks[$kr['IdDetailKriteria']]);
+		}
+
+		foreach($alternatif as $IdAlternatif => $alt) {
+			foreach($alt['nilai'] as $key => $value) {
+				$arr_alternatif[$IdAlternatif][$value['IdDetailKriteria']] = ($value['Nilai'] / $matriks[$value['IdDetailKriteria']]);
+			}
+		}
+
+		return ['matriks' => $matriks, 'data_alternatif' => $arr_alternatif];
+	}
+
+	function matriks_solusi($matriks_keputusan_ternormalisasi) {
+		$matriks_solusi_positif = [];
+		$matriks_solusi_negatif = [];
+
+		foreach($matriks_keputusan_ternormalisasi['matriks'] as $IdKriteria => $Nilai) {
+			$matriks_solusi_positif[$IdKriteria] = 0;
+			$matriks_solusi_negatif[$IdKriteria] = 1;
+
+			foreach($matriks_keputusan_ternormalisasi['data_alternatif'] as $Alternatif) {
+				foreach($Alternatif as $k => $v) {
+					if($IdKriteria == $k) {
+						if($matriks_solusi_positif[$IdKriteria] < $v) {
+							$matriks_solusi_positif[$IdKriteria] = $v;
+						}
+
+						if($matriks_solusi_negatif[$IdKriteria] > $v) {
+							$matriks_solusi_negatif[$IdKriteria] = $v;
+						}
+					}
+				}
+			}
+		}
+
+		return [
+			'matriks_solusi_positif' => $matriks_solusi_positif,
+			'matriks_solusi_negatif' => $matriks_solusi_negatif,
+		];
+	}
+
+	// Status Penerima
+	function edit_status_penerima($data) {
+		$qry = mysqli_query($this->conn, "update dataanalisa set StatusPenerima = '".$data['StatusPenerima']."' where IdAlternatif = '".$data['IdAlternatif']."'") or die(mysqli_error($this->conn));
+		return $qry;
+	}
 }
 ?>

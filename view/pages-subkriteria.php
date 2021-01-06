@@ -298,7 +298,7 @@
                                             ?>
                                             <tr>
                                                 <?php 
-                                                    $sql="SELECT DISTINCT IdSubKriteria, DataKriteria.IdKriteria, NamaKriteria, NamaSubKriteria, BobotSubKriteria FROM DataSubKriteria INNER JOIN DataKriteria ON DataSubKriteria.IdKriteria = DataKriteria.IdKriteria INNER JOIN DataDetailKriteria ON DataKriteria.IdKriteria=DataDetailKriteria.IdKriteria ORDER BY IdSubKriteria ASC";
+                                                    $sql="SELECT DISTINCT IdSubKriteria, datakriteria.IdKriteria, NamaKriteria, NamaSubKriteria, BobotSubKriteria FROM datasubkriteria INNER JOIN datakriteria ON datasubkriteria.IdKriteria = datakriteria.IdKriteria INNER JOIN datadetailkriteria ON datakriteria.IdKriteria=datadetailkriteria.IdKriteria ORDER BY IdSubKriteria ASC";
                                                     $query=mysqli_query($sistem->getConnection(), $sql);
                                                     while ($data=mysqli_fetch_array($query)) {
                                                 ?>

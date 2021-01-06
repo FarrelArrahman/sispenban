@@ -23,7 +23,7 @@
         $carinik = $_POST['CariNIK'];
         $data = $sistem->cari_nik($carinik);
     } else {
-        // $data = $sistem->tampil_analisa();
+        $data = $sistem->tampil_analisa();
     }
 ?>
 
@@ -256,7 +256,7 @@
                                             ?>
                                             <tr>
                                                 <?php 
-                                                    $sql="SELECT * FROM DataAlternatif INNER JOIN DataJenisBantuan ON DataAlternatif.IdJenisBantuan=DataJenisBantuan.IdJenisBantuan";
+                                                    $sql="SELECT * FROM dataalternatif INNER JOIN datajenisbantuan ON dataalternatif.IdJenisBantuan=datajenisbantuan.IdJenisBantuan";
                                                     $query=mysqli_query($sistem->getConnection(), $sql);
                                                     while ($data=mysqli_fetch_array($query)) {
                                                 ?>

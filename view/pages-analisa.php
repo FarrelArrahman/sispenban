@@ -243,50 +243,213 @@
                         <?php if(@$_GET['jenis_bantuan']){
                             $data = $sistem->getKriteriaByJenisBantuan($jenis);
                             $alternatif = $sistem->getAlternatifByJenisBantuan($jenis);
-                            $nilai = $sistem->getNilaiFromDetailKriteriaByAlternatifInJenisBantuan('J001');
+                            $nilai = $sistem->getNilaiFromDetailKriteriaByAlternatifInJenisBantuan($jenis);
+                            $topsis = $sistem->topsis($data, $nilai);
                         ?>
-                        <form action="process/add_nilaialternatif.php" method="POST">
+
+                        <?php if($alternatif != [] && $nilai != []){
+                        ?>
+
                         <div class="card">
                             <div class="card-body">
-                                <div class="card-title text-info">
-                                    Hasil Analisa
-                                </div>
-                                
-                                <div class="table-responsive">
-                                    <table class="table user-table">
-                                        <thead>
-                                            <tr class="table-info">
-                                                <th class="border-top-0 text-center">Alternatif</th>
-                                                <?php foreach($data['data_subkriteria'] as $key => $value): ?>
-                                                <th class="border-top-0 text-center"><?php echo $key; ?></th>
+                                <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-hasil-analisa-tab" data-toggle="pill" href="#pills-hasil-analisa" role="tab" aria-controls="pills-hasil-analisa" aria-selected="true">Hasil Analisa</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-matriks-keputusan-ternormalisasi-tab" data-toggle="pill" href="#pills-matriks-keputusan-ternormalisasi" role="tab" aria-controls="pills-matriks-keputusan-ternormalisasi" aria-selected="false">Matriks Keputusan Ternormalisasi</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-matriks-keputusan-ternormalisasi-terbobot-tab" data-toggle="pill" href="#pills-matriks-keputusan-ternormalisasi-terbobot" role="tab" aria-controls="pills-matriks-keputusan-ternormalisasi-terbobot" aria-selected="false">Matriks Keputusan Ternormalisasi Terbobot</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-matriks-solusi-ideal-positif-tab" data-toggle="pill" href="#pills-matriks-solusi-ideal-positif" role="tab" aria-controls="pills-matriks-solusi-ideal-positif" aria-selected="false">Matriks Solusi Ideal Positif</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-matriks-solusi-ideal-negatif-tab" data-toggle="pill" href="#pills-matriks-solusi-ideal-negatif" role="tab" aria-controls="pills-matriks-solusi-ideal-negatif" aria-selected="false">Matriks Solusi Ideal Negatif</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-status-penerima-tab" data-toggle="pill" href="#pills-status-penerima" role="tab" aria-controls="pills-matriks-solusi-ideal-negatif" aria-selected="false">Status Penerima</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="pills-tabContent">
+                                    <!-- Hasil Analisa -->
+                                    <div class="tab-pane fade show active" id="pills-hasil-analisa" role="tabpanel" aria-labelledby="pills-hasil-analisa">
+                                        <div class="card-title text-info">
+                                            Hasil Analisa
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table user-table">
+                                                <thead>
+                                                    <tr class="table-info">
+                                                        <th class="border-top-0 text-center">Alternatif</th>
+                                                        <?php foreach($data['data_subkriteria'] as $key => $value): ?>
+                                                        <th class="border-top-0 text-center"><?php echo $key; ?></th>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach($nilai as $idalternatif => $analisa): ?>
+                                                    <tr class="user-table">
+                                                        <td><?php echo $analisa['nama'] ?></td>
+                                                        <?php foreach($analisa['nilai'] as $key => $value): ?>
+                                                        <?php foreach($data['data_subkriteria'] as $idsubkriteria => $v): ?>
+                                                        <?php if($value['IdDetailKriteria'] == $idsubkriteria){ ?>
+                                                        <td>
+                                                            <?php echo $value['Nilai']; ?>
+                                                        </td>
+                                                        <?php } ?>
+                                                        <?php endforeach; ?>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Matriks Keputusan Ternormalisasi -->
+                                    <div class="tab-pane fade" id="pills-matriks-keputusan-ternormalisasi" role="tabpanel" aria-labelledby="pills-matriks-keputusan-ternormalisasi">
+                                        <div class="card-title text-info">
+                                            Matriks Keputusan Ternormalisasi
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table user-table">
+                                                <thead>
+                                                    <tr class="table-info">
+                                                        <?php foreach($data['data_kriteria'] as $k => $v): ?>
+                                                        <th class="border-top-0 text-center"><?php echo '[x'.++$k.']' ?></th>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="user-table">
+                                                        <?php foreach($topsis['matriks_keputusan_ternormalisasi']['matriks'] as $v): ?>
+                                                        <td><?php echo $v; ?></td>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Matriks Keputusan Ternormalisasi Terbobot -->
+                                    <div class="tab-pane fade" id="pills-matriks-keputusan-ternormalisasi-terbobot" role="tabpanel" aria-labelledby="pills-matriks-keputusan-ternormalisasi-terbobot">
+                                        <div class="card-title text-info">
+                                            Matriks Keputusan Ternormalisasi Terbobot
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table user-table">
+                                                <?php foreach($nilai as $IdAlternatif => $alt): ?>
+                                                <tr class="user-table">
+                                                    <td class="table-info"><?php echo $alt['nama']; ?></td>
+                                                    <?php foreach($topsis['matriks_keputusan_ternormalisasi']['data_alternatif'] as $k => $v): ?>
+                                                    <?php if($k == $IdAlternatif): ?>
+                                                    <?php foreach($v as $IdDetailKriteria => $Nilai): ?>
+                                                    <td><?php echo $Nilai; ?></td>
+                                                    <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </tr>
                                                 <?php endforeach; ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach($nilai as $idalternatif => $analisa): ?>
-                                            <tr class="user-table">
-                                                <td><?php echo $analisa['nama'] ?></td>
-                                                <?php foreach($analisa['nilai'] as $key => $value): ?>
-                                                <?php foreach($data['data_subkriteria'] as $idsubkriteria => $v): ?>
-                                                <?php if($value['IdDetailKriteria'] == $idsubkriteria){ ?>
-                                                <td>
-                                                    <?php echo $value['Nilai']; ?>
-                                                </td>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Matriks Solusi Ideal Positif -->
+                                    <div class="tab-pane fade" id="pills-matriks-solusi-ideal-positif" role="tabpanel" aria-labelledby="pills-matriks-solusi-ideal-positif">
+                                        <div class="card-title text-info">
+                                            Matriks Solusi Ideal Positif
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table user-table">
+                                                <?php $i = 1; foreach($topsis['matriks_solusi']['matriks_solusi_positif'] as $IdKriteria => $Nilai): ?>
+                                                <tr class="user-table">
+                                                    <td width="10" class="table-info"><?php echo 'Y' . $i++ . '+'; ?></td>
+                                                    <td><?php echo $Nilai; ?></td>
+                                                </tr>
+                                                <?php endforeach; ?>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Matriks Solusi Ideal Negatif -->
+                                    <div class="tab-pane fade" id="pills-matriks-solusi-ideal-negatif" role="tabpanel" aria-labelledby="pills-matriks-solusi-ideal-negatif">
+                                        <div class="card-title text-info">
+                                            Matriks Solusi Ideal Negatif
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table user-table">
+                                                <?php $i = 1; foreach($topsis['matriks_solusi']['matriks_solusi_negatif'] as $IdKriteria => $Nilai): ?>
+                                                <tr class="user-table">
+                                                    <td width="10" class="table-info"><?php echo 'Y' . $i++ . '-'; ?></td>
+                                                    <td><?php echo $Nilai; ?></td>
+                                                </tr>
+                                                <?php endforeach; ?>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status Penerima -->
+                                    <div class="tab-pane fade" id="pills-status-penerima" role="tabpanel" aria-labelledby="pills-status-penerima">
+                                        <div class="card-title text-info">
+                                            Status Penerima
+                                        </div>
+                                        <form name="edit-status-penerima" action="process/edit_status_penerima.php" method="POST">
+                                        <div class="table-responsive">
+                                            <table class="table user-table">
+                                                <tr class="table-info">
+                                                    <td>Nama</td>
+                                                    <td>Jenis Bantuan</td>
+                                                    <td>Status Penerima</td>
+                                                </tr>
+                                                <?php 
+                                                    $sql="SELECT * FROM dataalternatif INNER JOIN datajenisbantuan ON dataalternatif.IdJenisBantuan=datajenisbantuan.IdJenisBantuan INNER JOIN dataanalisa ON dataanalisa.IdAlternatif=dataalternatif.IdAlternatif WHERE dataalternatif.IdJenisBantuan='$jenis'";
+                                                    $query=mysqli_query($sistem->getConnection(), $sql);
+                                                    while ($data=mysqli_fetch_array($query)) { ?>
+                                                <tr class="user-table">
+                                                    <td><?php echo $data['Nama']?></td>
+                                                    <td><?php echo $data['NamaJenisBantuan']?></td>
+                                                    <td>
+                                                        <?php if($login == "Decision Maker"){ ?>
+                                                        <select name="<?php echo $data['IdAlternatif'] ?>" id="" required>
+                                                            <option value="" selected disabled>Pilih Status...</option>
+                                                            <option <?php if($data['StatusPenerima'] == "Berhak") echo 'selected'; ?> value="Berhak">Berhak</option>
+                                                            <option <?php if($data['StatusPenerima'] == "Tidak Berhak") echo 'selected'; ?> value="Tidak Berhak">Tidak Berhak</option>
+                                                        </select>
+                                                        <?php } else { ?>
+                                                        <span class="badge badge-<?php if($data['StatusPenerima'] == "Berhak") echo 'info'; else echo 'danger' ?>"><?php echo $data['StatusPenerima']; ?></span>
+                                                        <?php } ?>
+                                                    </td>
+                                                </tr>
                                                 <?php } ?>
-                                                <?php endforeach; ?>
-                                                <?php endforeach; ?>
-                                            </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                    
-                                    <div class="col-sm-12 d-flex">
-                                            <a href="pages-admin.php" class="btn btn-danger text-white mr-2">Kembali</a>
+                                            </table>
+                                        </div>
+
+                                        <?php if($login == "Decision Maker"){ ?>
+                                        <div class="text-center">
+                                            <button name="edit-status-penerima" value="1" type="submit" class="btn btn-success text-white">Simpan</button>
+                                        </div>
+                                        <?php } ?>
+                                        
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        </form>
+                        <?php } else { ?>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                Hasil Analisa tidak tersedia.
+                            </div>
+                        </div>
+                        <?php } ?>
+
                         <?php } ?>
                     </div>
                 </div>

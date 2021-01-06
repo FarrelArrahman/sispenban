@@ -237,6 +237,8 @@
                     $data = $sistem->getKriteriaByJenisBantuan($jenis);
                     $alternatif = $sistem->getAlternatifByJenisBantuan($jenis);
                     ?>
+                    <?php if(count($alternatif) > 0){
+                    ?>
                     <form action="process/add_nilaialternatif.php" method="POST">
                     <div class="col-sm-12">
                         <div class="card">
@@ -260,7 +262,7 @@
                                                 <td> 
                                                     <select class="form-control" name="<?php echo $key.'['.$alt['IdAlternatif'].']'; ?>">
                                                         <?php foreach($value as $sub_kriteria): ?>
-                                                            <option value="<?php echo $sub_kriteria['BobotSubKriteria'] ?>"><?php echo $sub_kriteria['NamaSubKriteria'] ?></option>
+                                                            <option value="<?php echo $sub_kriteria['BobotSubKriteria'] ?>"><?php echo $sub_kriteria['BobotSubKriteria'] ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </td>
@@ -279,6 +281,15 @@
                         </div>
                     </div>
                     </form>
+                    <?php } else { ?>
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                Data Alternatif tidak tersedia.
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
                     <?php } ?>
                 </div>
                 <!-- ============================================================== -->

@@ -294,7 +294,7 @@
                                             ?>
                                             <tr>
                                                 <?php 
-                                                    $sql="SELECT * FROM DataKriteria";
+                                                    $sql="SELECT * FROM datakriteria";
                                                     $query=mysqli_query($sistem->getConnection(), $sql);
                                                     while ($data=mysqli_fetch_array($query)) {
                                                 ?>

@@ -302,7 +302,7 @@
                                             ?>
                                             <tr>
                                                 <?php 
-                                                    $sql="SELECT * FROM DataDetailKriteria INNER JOIN DataJenisBantuan ON DataDetailKriteria.IdJenisBantuan=DataJenisBantuan.IdJenisBantuan INNER JOIN DataKriteria ON DataDetailKriteria.IdKriteria=DataKriteria.IdKriteria ORDER BY DataDetailKriteria.IdKriteria ASC";
+                                                    $sql="SELECT * FROM datadetailkriteria INNER JOIN datajenisbantuan ON datadetailkriteria.IdJenisBantuan=datajenisbantuan.IdJenisBantuan INNER JOIN datakriteria ON datadetailkriteria.IdKriteria=datakriteria.IdKriteria ORDER BY datadetailkriteria.IdKriteria ASC";
                                                     $query=mysqli_query($sistem->getConnection(), $sql);
                                                     while ($data=mysqli_fetch_array($query)) {
                                                 ?>
