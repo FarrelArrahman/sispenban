@@ -8,7 +8,7 @@
         $carinik = $_POST['CariNIK'];
         $data = $sistem->cari_nik($carinik);
     } else {
-        $data = $sistem->tampil_analisa();
+        $data = $sistem->tampil_alternatif();
     }
 ?>
 
