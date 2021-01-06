@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 25, 2020 at 10:06 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.8
+-- Host: localhost
+-- Generation Time: Jan 06, 2021 at 03:05 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -62,11 +62,10 @@ CREATE TABLE `dataanalisa` (
 --
 
 INSERT INTO `dataanalisa` (`IdAnalisa`, `IdAlternatif`, `StatusPenerima`) VALUES
-('AN001', 'A001', ''),
-('AN002', 'A001', ''),
-('AN003', 'A001', ''),
-('AN004', 'A001', ''),
-('AN005', 'A001', '');
+('AN001', 'A001', 'Berhak'),
+('AN002', 'A002', 'Berhak'),
+('AN003', 'A003', 'Berhak'),
+('AN004', 'A004', 'Tidak Berhak');
 
 -- --------------------------------------------------------
 
@@ -87,10 +86,45 @@ CREATE TABLE `datadetailanalisa` (
 
 INSERT INTO `datadetailanalisa` (`IdDetailAnalisa`, `IdAnalisa`, `IdDetailKriteria`, `Nilai`) VALUES
 ('DA001', 'AN001', 'DK001', 5),
-('DA002', 'AN002', 'DK001', 2),
-('DA003', 'AN003', 'DK001', 2),
-('DA004', 'AN004', 'DK001', 2),
-('DA005', 'AN005', 'DK001', 2);
+('DA002', 'AN001', 'DK002', 4),
+('DA003', 'AN001', 'DK003', 3),
+('DA004', 'AN001', 'DK004', 4),
+('DA005', 'AN001', 'DK005', 5),
+('DA006', 'AN001', 'DK006', 4),
+('DA007', 'AN001', 'DK007', 3),
+('DA008', 'AN001', 'DK008', 4),
+('DA009', 'AN001', 'DK009', 5),
+('DA010', 'AN001', 'DK010', 4),
+('DA011', 'AN002', 'DK001', 4),
+('DA012', 'AN002', 'DK002', 3),
+('DA013', 'AN002', 'DK003', 2),
+('DA014', 'AN002', 'DK004', 3),
+('DA015', 'AN002', 'DK005', 4),
+('DA016', 'AN002', 'DK006', 3),
+('DA017', 'AN002', 'DK007', 2),
+('DA018', 'AN002', 'DK008', 3),
+('DA019', 'AN002', 'DK009', 4),
+('DA020', 'AN002', 'DK010', 3),
+('DA021', 'AN003', 'DK001', 5),
+('DA022', 'AN003', 'DK002', 3),
+('DA023', 'AN003', 'DK003', 3),
+('DA024', 'AN003', 'DK004', 3),
+('DA025', 'AN003', 'DK005', 5),
+('DA026', 'AN003', 'DK006', 3),
+('DA027', 'AN003', 'DK007', 3),
+('DA028', 'AN003', 'DK008', 3),
+('DA029', 'AN003', 'DK009', 5),
+('DA030', 'AN003', 'DK010', 3),
+('DA031', 'AN004', 'DK001', 3),
+('DA032', 'AN004', 'DK002', 4),
+('DA033', 'AN004', 'DK003', 5),
+('DA034', 'AN004', 'DK004', 4),
+('DA035', 'AN004', 'DK005', 3),
+('DA036', 'AN004', 'DK006', 2),
+('DA037', 'AN004', 'DK007', 3),
+('DA038', 'AN004', 'DK008', 4),
+('DA039', 'AN004', 'DK009', 5),
+('DA040', 'AN004', 'DK010', 4);
 
 -- --------------------------------------------------------
 
